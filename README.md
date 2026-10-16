@@ -1,53 +1,58 @@
-# Ashkan Ledger Pro — Stage 40
+# Ashkan Ledger Pro
 
-## Improvements
-- Period report now includes opening balance, period debits and credits, and closing balance per account.
-- Opening balance is the signed net of **posted** entries before the start date (debit-positive). Closing = opening + debit - credit.
-- Debit/credit columns split signed opening and closing balances for presentation.
-- Period XLSX exports numeric amounts as real Excel numbers while account codes remain text. Other XLSX exports continue using the safe text-only writer.
-- Reports remain read-only.
+**A Bilingual Desktop Accounting & Financial Management Platform**
 
-## Limitations
-- Opening balances are computed from the full journal history, not a separate fiscal-year opening document.
-- This is a period account movement report, not a certified statutory trial balance.
-- WPF compilation/runtime could not be tested here (Windows .NET SDK unavailable). Build with VS 2022 and .NET 8 Desktop workload.
-- Back up `%LOCALAPPDATA%\AshkanLedgerPro\ledger.db` before upgrading.
+Ashkan Ledger Pro is a Windows desktop accounting application developed with **C#, .NET 8, WPF, Entity Framework Core and SQLite**.
 
+The project demonstrates practical software engineering skills through financial workflows, structured data management, bilingual user interfaces and accounting integrity controls.
 
-## Stage 41 — Detailed general ledger
+## Key Features
 
-- New read-only account-level journal movement report, accessible from Financial period reports.
-- Account selector, Jalali/Gregorian date inputs, opening balance, debit and credit movement, and running/closing balance.
-- Typed XLSX export (numeric amounts; dates and identifiers remain text).
-- No schema changes or financial mutations. All previous modules are preserved.
-- This is **not** a fiscal-year close/open workflow. Do not use it as a substitute for audited financial statements.
-- Build/runtime verification requires Windows and Visual Studio 2022 with .NET 8 desktop workload.
+- Chart of Accounts and General Ledger
+- Journal Entries and Trial Balance
+- Sales and Purchase Invoicing
+- Inventory and Stock Management
+- Treasury and Payment Management
+- Bank Reconciliation
+- Financial Reports and Analytics
+- Expense Budget Management
+- Role-Based Access Control
+- English and Persian Localization
+- Light and Dark Themes
+- CSV and XLSX Export
+- Fiscal Period Safeguards
 
+## Technology Stack
 
-Stage 45: see README_STAGE45.md for SQLite fiscal lock triggers and limitations.
+| Component | Technology |
+|---|---|
+| Programming Language | C# |
+| Framework | .NET 8 |
+| Desktop UI | WPF / XAML |
+| Database | SQLite |
+| ORM | Entity Framework Core |
+| Development Environment | Visual Studio |
+| Target Platform | Windows |
 
+## Engineering Focus
 
-See README_STAGE47.md for new database protection diagnostics.
+The project emphasizes maintainable application architecture, financial data integrity, validation, localization and practical business workflows.
 
+## Getting Started
 
-Stage 52: Windows CI workflow, source-backed SQLite guard tests, repository hygiene. See README_STAGE52.md.
+1. Install Visual Studio with .NET desktop development support.
+2. Install a compatible .NET SDK and restore NuGet packages.
+3. Open `AshkanLedgerPro.sln`.
+4. Build and run the application on Windows.
 
+## Project Status
 
-Stage 65: see `README_STAGE65.md` for historical balance date filters, visual bars and printing.
+Active development and portfolio demonstration.
 
+The project is not presented as a certified accounting or production-ready ERP system. End-to-end Windows build and deployment validation remain necessary.
 
-Stage 88: see `README_STAGE88.md` for the new top-five account chart.
+## Author
 
+**Ashkan Motaei**
 
-## Stage 89
-Cash movement monthly chart, cumulative recorded movement, warning threshold, and CSV export. See `README_STAGE89.md`.
-
-
-Stage 90: SDK roll-forward compatibility and session-only expense budget checking; see README_STAGE90.md.
-
-### Latest update: Stage 91
-Expense budget presets now persist locally (save/load/delete) without changing accounting entries. See `README_STAGE91.md`.
-
-
-Stage 92: see [README_STAGE92.md](README_STAGE92.md) for the CS0165 fix and saved-budget grid.
-"# ashkan-ledger-pro" 
+GitHub: [ashkan20171](https://github.com/ashkan20171)
