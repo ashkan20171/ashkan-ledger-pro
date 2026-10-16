@@ -1,0 +1,13 @@
+using AshkanLedgerPro.Data;
+using AshkanLedgerPro.Models;
+using Microsoft.EntityFrameworkCore;
+namespace AshkanLedgerPro.Services;
+public class LedgerService {
+ public void Initialize() { using var db=new LedgerDb(); db.Database.EnsureCreated(); if(db.Accounts.Any())return; db.Accounts.AddRange(new Account{Code="1000",Name="Cash",Type="Asset"},new Account{Code="1100",Name="Bank",Type="Asset"},new Account{Code="2000",Name="Accounts Payable",Type="Liability"},new Account{Code="3000",Name="Capital",Type="Equity"},new Account{Code="4000",Name="Revenue",Type="Revenue"},new Account{Code="5000",Name="Expenses",Type="Expense"}); db.SaveChanges(); }
+ public List<Account> Accounts(){using var db=new LedgerDb();return db.Accounts.AsNoTracking().OrderBy(x=>x.Code).ToList();}
+ public List<JournalEntry> Entries(){using var db=new LedgerDb();return db.Entries.AsNoTracking().Include(x=>x.Lines).ThenInclude(x=>x.Account).OrderByDescending(x=>x.Id).ToList();}
+ public void AddAccount(string code,string name,string type){code=code.Trim();name=name.Trim();if(string.IsNullOrWhiteSpace(code)||string.IsNullOrWhiteSpace(name))throw new ArgumentException("Code and name are required.");if(!new[]{"Asset","Liability","Equity","Revenue","Expense"}.Contains(type))throw new ArgumentException("Invalid account type.");using var db=new LedgerDb();if(db.Accounts.Any(x=>x.Code==code))throw new ArgumentException("Account code already exists.");db.Accounts.Add(new Account{Code=code,Name=name,Type=type});db.SaveChanges();}
+ public void Post(string description,int debitId,int creditId,decimal amount){if(string.IsNullOrWhiteSpace(description))throw new ArgumentException("Description is required.");if(amount<=0||debitId==creditId)throw new ArgumentException("Amount must be positive and accounts different.");if(decimal.Round(amount,2)!=amount)throw new ArgumentException("Use at most two decimal places.");using var db=new LedgerDb();if(!db.Accounts.Any(x=>x.Id==debitId)||!db.Accounts.Any(x=>x.Id==creditId))throw new ArgumentException("Account not found.");FiscalPeriodService.EnsurePostingAllowed(db,DateTime.Today);using var tx=db.Database.BeginTransaction();var e=new JournalEntry{Description=description.Trim(),Posted=true,Lines=new(){new JournalLine{AccountId=debitId,Debit=amount},new JournalLine{AccountId=creditId,Credit=amount}}};db.Entries.Add(e);db.SaveChanges();tx.Commit();}
+ public Dictionary<int,decimal> Balances(){using var db=new LedgerDb();return db.Lines.AsNoTracking().ToList().GroupBy(x=>x.AccountId).ToDictionary(x=>x.Key,x=>x.Sum(y=>y.Debit-y.Credit));}
+ public decimal Balance(int accountId)=>Balances().GetValueOrDefault(accountId);
+}

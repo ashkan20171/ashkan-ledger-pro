@@ -1,0 +1,3 @@
+namespace AshkanLedgerPro.Models;
+public sealed class SalesInvoice { public int Id {get;set;} public DateTime CreatedAtUtc {get;set;}=DateTime.UtcNow; public int PartnerId {get;set;} public BusinessPartner? Partner {get;set;} public string Status {get;set;}="Posted"; public decimal Subtotal {get;set;} public decimal Discount {get;set;} public decimal Tax {get;set;} public decimal Total {get;set;} public List<SalesInvoiceLine> Items {get;set;}=new(); }
+public sealed class SalesInvoiceLine { public int Id {get;set;} public int SalesInvoiceId {get;set;} public int StockItemId {get;set;} public StockItem? StockItem {get;set;} public int Quantity {get;set;} public decimal UnitPrice {get;set;} public decimal LineTotal {get;set;} }

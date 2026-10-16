@@ -1,0 +1,4 @@
+Repository: ashkan-ledger-pro
+Description: Bilingual WPF accounting desktop application in C#/.NET 8 with SQLite, journal controls, invoicing, treasury, fiscal safeguards and financial analytics.
+Topics: csharp, dotnet, dotnet8, wpf, sqlite, entity-framework-core, accounting, finance, desktop-app, localization, persian, clean-architecture, portfolio
+Website: (leave empty unless a real demo URL exists)

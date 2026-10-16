@@ -1,0 +1,40 @@
+name: Windows WPF CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Build and SQLite regression tests
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore dependencies
+        run: dotnet restore AshkanLedgerPro.sln
+      - name: Build WPF (Release)
+        run: dotnet build AshkanLedgerPro.sln --configuration Release --no-restore -warnaserror
+      - name: SQLite guard regression suite
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check XAML XML syntax
+        shell: pwsh
+        run: |
+          Get-ChildItem src -Recurse -Filter *.xaml | ForEach-Object {
+            $null = [xml](Get-Content $_.FullName -Raw)
+            Write-Host "Valid XAML XML: $($_.Name)"
+          }
